@@ -1,6 +1,6 @@
 # PROJECT_STATUS — Site Dr. João Cláudio Miranda
 
-> **Read this first if you're resuming the project (fresh machine or new session).**
+> **Read this first if you're resuming the project on a new machine or in a new session.**
 > It is the single source of truth for *what this is, what's done, how it's built, how to redeploy, and what's next*. Everything operational that isn't obvious from the code is captured here.
 
 Last updated: 2026-07-16.
