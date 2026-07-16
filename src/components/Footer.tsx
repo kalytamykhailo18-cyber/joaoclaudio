@@ -53,7 +53,12 @@ export default function Footer() {
                 {site.phone}
               </li>
             </ul>
-            <div className="rev"><span className="stars">★★★★★</span> <span style={{ fontSize: 13 }}>Avaliações Google</span></div>
+            <a className="rev" href={site.googleReviewsUrl} target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
+              <span className="stars">★★★★★</span>{" "}
+              <span style={{ fontSize: 13 }}>
+                {site.rating.toFixed(1).replace(".", ",")} · {site.reviewCount} avaliações no Google
+              </span>
+            </a>
           </div>
         </div>
         <div className="fbottom">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { regions, treatments } from "@/content/clusters";
 import { site } from "@/content/site";
 import CtaBand from "@/components/CtaBand";
+import GoogleReviews from "@/components/GoogleReviews";
 
 const STEPS = [
   { n: 1, t: "Diagnóstico preciso", d: "Avaliação clínica detalhada e análise de imagem para identificar a origem real da dor." },
@@ -153,15 +154,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIAL */}
-      <section className="testi">
-        <div className="wrap">
-          <span className="eyebrow">Histórias de alívio</span>
-          <div className="stars">★★★★★</div>
-          <p>&ldquo;Convivi anos com dor no joelho achando que só a cirurgia resolveria. Com o tratamento certo, voltei a caminhar e a dormir sem dor.&rdquo;</p>
-          <cite>Paciente · {site.city} — depoimento ilustrativo</cite>
-        </div>
-      </section>
+      {/* GOOGLE REVIEWS */}
+      <GoogleReviews />
 
       {/* QUOTE */}
       <section className="quote" id="sobre">

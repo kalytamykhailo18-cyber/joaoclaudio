@@ -7,11 +7,22 @@ export const site = {
   region: "GO",
   country: "BR",
   domain: "https://joaoclaudiomiranda.com",
-  // Placeholders — substituir pelos dados reais fornecidos pelo João
+  // Endereço real (Google Business Profile)
+  clinicName: "Clínica ortopédica Dr. João Cláudio Miranda",
+  address: "Av. Portugal, 1148 — Sala 702B, Órion Business & Health Complex, St. Marista, Goiânia - GO, 74150-030",
+  street: "Av. Portugal, 1148 — Sala 702B",
+  district: "Setor Marista",
+  postalCode: "74150-030",
+  // Google Business Profile — prova social
+  rating: 5.0,
+  reviewCount: 569,
+  // TODO: substituir pela URL curta do perfil / place_id reais do João
+  googleReviewsUrl:
+    "https://www.google.com/maps/search/?api=1&query=Dr.+Jo%C3%A3o+Cl%C3%A1udio+Miranda+Goi%C3%A2nia",
+  // Placeholders — ainda faltam do João
   phone: "(62) 0000-0000",
   whatsapp: "5562000000000",
   instagram: "@drjoaoclaudio",
-  address: "Goiânia · GO (endereço a confirmar)",
   credentials: [
     { short: "SBOT", label: "Titular" },
     { short: "TRF1", label: "Perito Judicial" },

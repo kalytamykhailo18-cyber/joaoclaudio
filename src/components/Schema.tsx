@@ -23,9 +23,17 @@ export function PhysicianSchema() {
         areaServed: `${site.city}, ${site.region}`,
         address: {
           "@type": "PostalAddress",
+          streetAddress: site.street,
           addressLocality: site.city,
           addressRegion: site.region,
+          postalCode: site.postalCode,
           addressCountry: site.country,
+        },
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: site.rating,
+          reviewCount: site.reviewCount,
+          bestRating: 5,
         },
       }}
     />
