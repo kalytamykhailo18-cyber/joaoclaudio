@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { site } from "@/content/site";
+import { getSiteSettings, getPages } from "@/lib/content";
 import Breadcrumb from "@/components/Breadcrumb";
 import CtaBand from "@/components/CtaBand";
+import Reveal from "@/components/Reveal";
+import InlineEdit, { InlineArrayItem, InlineArrayAdd } from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema } from "@/components/Schema";
 
 export const metadata: Metadata = {
@@ -11,36 +14,77 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sobre" },
 };
 
-export default function SobrePage() {
+export const revalidate = 60;
+
+export default async function SobrePage() {
+  const [site, pages] = await Promise.all([getSiteSettings(), getPages()]);
+  const h = pages.sobre;
+  const creds = pages.sobreCreds;
+  const lead = h.lead.replace("O médico", `O ${site.doctor}`);
+  const bioIsPlaceholder = h.bio.trim().startsWith("[");
   return (
     <>
-      <section className="page-hero">
-        <div className="wrap">
-          <Breadcrumb items={[{ name: "Início", url: "/" }, { name: "O médico" }]} />
-          <span className="eyebrow">O médico</span>
-          <h1>Autoridade médica com escuta de gente</h1>
-          <p>
-            O {site.doctor} dedica sua prática ao tratamento da dor crônica e das doenças
-            ortopédicas, unindo diagnóstico preciso, técnicas modernas e uma relação próxima com cada
-            paciente.
-          </p>
-        </div>
-      </section>
+      <InlineEdit
+        globalSlug="pages"
+        title="Editar: Sobre (topo)"
+        fields={[
+          { name: "sobre.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
+          { name: "sobre.h1", label: "Título (H1)", type: "text", value: h.h1 },
+          { name: "sobre.lead", label: "Parágrafo de abertura", type: "textarea", value: lead },
+        ]}
+      >
+        <section className="page-hero">
+          <div className="wrap">
+            <Reveal as="div" index={0}>
+              <Breadcrumb items={[{ name: "Início", url: "/" }, { name: "O médico" }]} />
+            </Reveal>
+            <Reveal as="span" className="eyebrow" index={1}>{h.eyebrow}</Reveal>
+            <Reveal as="h1" index={2}>{h.h1}</Reveal>
+            <Reveal as="p" index={3}>{lead}</Reveal>
+          </div>
+        </section>
+      </InlineEdit>
 
-      <section>
-        <div className="wrap prose">
-          <h2>Formação e credenciais</h2>
-          <ul style={{ listStyle: "none", display: "grid", gap: 12, marginTop: 8 }}>
-            <li>✓ Titular da Sociedade Brasileira de Ortopedia e Traumatologia (SBOT)</li>
-            <li>✓ Perito judicial junto ao TRF1</li>
-            <li>✓ Membro da IASP — associação internacional para o estudo da dor</li>
-            <li>✓ Professor e coordenador de serviços de ortopedia</li>
-          </ul>
-          <p style={{ color: "#8a6a2f", fontStyle: "italic", marginTop: 24 }}>
-            [Biografia completa e foto profissional — fornecidas por você.]
-          </p>
-        </div>
-      </section>
+      <InlineEdit
+        globalSlug="pages"
+        title="Editar: Sobre (biografia)"
+        fields={[
+          { name: "sobre.credsHeading", label: "Título das credenciais", type: "text", value: h.credsHeading },
+          { name: "sobre.bio", label: "Biografia", type: "textarea", value: h.bio },
+        ]}
+      >
+        <section>
+          <div className="wrap prose">
+            <Reveal as="h2" index={0}>{h.credsHeading}</Reveal>
+            <ul style={{ listStyle: "none", display: "grid", gap: 12, marginTop: 8 }}>
+              {creds.map((cr, i) => (
+                <Reveal as="li" className="inline-rel" index={i} key={i}>
+                  ✓ {cr.text}
+                  <InlineArrayItem
+                    globalSlug="pages"
+                    field="sobreCreds"
+                    items={creds}
+                    index={i}
+                    title={`Editar credencial ${i + 1}`}
+                    itemFields={[{ name: "text", label: "Credencial", type: "text" }]}
+                  />
+                </Reveal>
+              ))}
+            </ul>
+            <InlineArrayAdd
+              globalSlug="pages"
+              field="sobreCreds"
+              items={creds}
+              label="Credencial"
+              title="Nova credencial"
+              itemFields={[{ name: "text", label: "Credencial", type: "text" }]}
+            />
+            <Reveal as="p" index={1} style={bioIsPlaceholder ? { color: "#8a94a8", fontStyle: "italic", marginTop: 24 } : { marginTop: 24 }}>
+              {h.bio}
+            </Reveal>
+          </div>
+        </section>
+      </InlineEdit>
 
       <CtaBand />
       <BreadcrumbSchema items={[{ name: "Início", url: "/" }, { name: "O médico", url: "/sobre" }]} />

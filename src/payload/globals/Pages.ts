@@ -1,0 +1,149 @@
+import type { Field, GlobalConfig } from "payload";
+import { revalidateChange } from "../hooks/revalidate";
+
+type F = { name: string; label: string; type: "text" | "textarea" };
+const group = (name: string, label: string, fields: F[]): Field => ({
+  name,
+  type: "group",
+  label,
+  fields: fields.map((f) => ({ name: f.name, type: f.type, label: f.label })) as Field[],
+});
+
+// Conteúdo editável das páginas estáticas (heróis e blocos) + faixa de CTA.
+export const Pages: GlobalConfig = {
+  slug: "pages",
+  label: "Páginas (conteúdo)",
+  admin: { group: "Conteúdo" },
+  access: { read: () => true },
+  hooks: { afterChange: [revalidateChange] },
+  fields: [
+    group("footer", "Rodapé", [
+      { name: "tagline", label: "Descrição (rodapé)", type: "textarea" },
+      { name: "colAreas", label: "Coluna — Áreas", type: "text" },
+      { name: "colTreatments", label: "Coluna — Tratamentos", type: "text" },
+      { name: "colMore", label: "Coluna — Mais", type: "text" },
+      { name: "colContact", label: "Coluna — Contato", type: "text" },
+      { name: "reviewsSuffix", label: "Sufixo das avaliações", type: "text" },
+      { name: "rights", label: "Direitos reservados", type: "text" },
+    ]),
+    group("legal", "Páginas legais", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "privacy", label: "Política de Privacidade", type: "textarea" },
+      { name: "cookies", label: "Política de Cookies", type: "textarea" },
+      { name: "terms", label: "Termos de Uso", type: "textarea" },
+    ]),
+    group("reviews", "Avaliações do Google (home)", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "heading", label: "Título", type: "text" },
+      { name: "verified", label: "Texto — perfil verificado", type: "text" },
+      { name: "fallbackQuote", label: "Citação padrão (sem API)", type: "textarea" },
+      { name: "button", label: "Botão", type: "text" },
+    ]),
+    group("testimonials", "Depoimentos (home)", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "heading", label: "Título", type: "text" },
+      { name: "note", label: "Aviso (rodapé do carrossel)", type: "text" },
+    ]),
+    group("cta", "Faixa de CTA", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h2main", label: "Título (parte 1)", type: "text" },
+      { name: "h2serif", label: "Título (parte itálica)", type: "text" },
+      { name: "button", label: "Texto do botão", type: "text" },
+    ]),
+    group("treatmentsIndex", "Tratamentos (índice)", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "p", label: "Descrição", type: "textarea" },
+    ]),
+    group("blogIndex", "Blog (índice)", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "p", label: "Descrição", type: "textarea" },
+    ]),
+    group("sobre", "Sobre o médico", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "lead", label: "Parágrafo de abertura", type: "textarea" },
+      { name: "credsHeading", label: "Título das credenciais", type: "text" },
+      { name: "bio", label: "Biografia", type: "textarea" },
+    ]),
+    group("contato", "Contato", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "lead", label: "Parágrafo de abertura", type: "textarea" },
+      { name: "proseHeading", label: "Título do bloco de contato", type: "text" },
+      { name: "whatsappBtn", label: "Botão WhatsApp", type: "text" },
+      { name: "phoneBtn", label: "Botão telefone", type: "text" },
+      { name: "note", label: "Nota (mapa/formulário)", type: "textarea" },
+    ]),
+    group("agendar", "Agendar", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "lead", label: "Parágrafo de abertura", type: "textarea" },
+      { name: "stepsEyebrow", label: "Rótulo dos passos", type: "text" },
+      { name: "stepsHeading", label: "Título dos passos", type: "text" },
+      { name: "stepsSub", label: "Subtítulo dos passos", type: "text" },
+      { name: "locHeading", label: "Título da localização", type: "text" },
+      { name: "locNote", label: "Observação da localização", type: "textarea" },
+    ]),
+    group("depoimentos", "Depoimentos", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "lead", label: "Parágrafo de abertura", type: "textarea" },
+      { name: "note", label: "Parágrafo explicativo", type: "textarea" },
+      { name: "button", label: "Botão (avaliações)", type: "text" },
+    ]),
+    group("regionPage", "Páginas de região (rótulos)", [
+      { name: "careEyebrow", label: "Rótulo do hero", type: "text" },
+      { name: "condsEyebrow", label: "Rótulo das condições", type: "text" },
+      { name: "condsHeadingPrefix", label: "Título das condições (prefixo)", type: "text" },
+      { name: "cardCta", label: "Texto do link do card", type: "text" },
+    ]),
+    group("treatmentPage", "Páginas de tratamento (rótulos)", [
+      { name: "eyebrow", label: "Rótulo do hero", type: "text" },
+      { name: "howHeading", label: "Título — Como funciona", type: "text" },
+      { name: "appsHeading", label: "Título — Aplicações", type: "text" },
+    ]),
+    group("txPage", "Tratamento × condição (rótulos)", [
+      { name: "eyebrow", label: "Rótulo do hero", type: "text" },
+      { name: "heroConnector", label: "Conector do parágrafo do hero", type: "text" },
+      { name: "prosePlaceholder", label: "Texto reservado (conteúdo clínico)", type: "textarea" },
+    ]),
+    group("dorCronica", "Dor crônica", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "h1", label: "Título (H1)", type: "text" },
+      { name: "lead", label: "Parágrafo de abertura", type: "textarea" },
+      { name: "introH2", label: "Intro — título", type: "text" },
+      { name: "introP1", label: "Intro — parágrafo 1", type: "textarea" },
+      { name: "introP2", label: "Intro — parágrafo 2", type: "textarea" },
+      { name: "faqHeading", label: "Título do FAQ", type: "text" },
+      { name: "areasEyebrow", label: "Áreas — rótulo", type: "text" },
+      { name: "areasHeading", label: "Áreas — título", type: "text" },
+      { name: "promoTitle", label: "Card promo — título", type: "text" },
+    ]),
+    {
+      name: "dorCronicaFaq",
+      type: "array",
+      label: "Dor crônica — FAQ",
+      fields: [
+        { name: "q", type: "text", label: "Pergunta", required: true },
+        { name: "a", type: "textarea", label: "Resposta", required: true },
+      ],
+    } as Field,
+    {
+      name: "agendarSteps",
+      type: "array",
+      label: "Agendar — passos",
+      fields: [
+        { name: "t", type: "text", label: "Título", required: true },
+        { name: "d", type: "textarea", label: "Descrição", required: true },
+      ],
+    } as Field,
+    {
+      name: "sobreCreds",
+      type: "array",
+      label: "Sobre — credenciais",
+      fields: [{ name: "text", type: "text", label: "Credencial", required: true }],
+    } as Field,
+  ],
+};

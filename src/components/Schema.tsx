@@ -1,4 +1,5 @@
 import { site } from "@/content/site";
+import { getSiteSettings } from "@/lib/content";
 
 // Injeta JSON-LD sem escapar aspas (dangerouslySetInnerHTML é o padrão para Schema.org no Next).
 function Ld({ data }: { data: object }) {
@@ -10,7 +11,8 @@ function Ld({ data }: { data: object }) {
   );
 }
 
-export function PhysicianSchema() {
+export async function PhysicianSchema() {
+  const site = await getSiteSettings();
   return (
     <Ld
       data={{
@@ -82,5 +84,47 @@ export function MedicalConditionSchema({ name, description }: { name: string; de
 export function MedicalTherapySchema({ name, description }: { name: string; description: string }) {
   return (
     <Ld data={{ "@context": "https://schema.org", "@type": "MedicalTherapy", name, description }} />
+  );
+}
+
+export function MedicalSpecialtySchema({ name, description }: { name: string; description: string }) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        about: { "@type": "MedicalSpecialty", name },
+        name,
+        description,
+        provider: { "@type": "Physician", name: site.doctor, url: site.domain },
+      }}
+    />
+  );
+}
+
+export function ArticleSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+}) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        headline,
+        description,
+        datePublished,
+        mainEntityOfPage: `${site.domain}${url}`,
+        author: { "@type": "Physician", name: site.doctor, url: site.domain },
+        publisher: { "@type": "Organization", name: site.clinicName },
+      }}
+    />
   );
 }

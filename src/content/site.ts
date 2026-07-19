@@ -19,10 +19,10 @@ export const site = {
   // TODO: substituir pela URL curta do perfil / place_id reais do João
   googleReviewsUrl:
     "https://www.google.com/maps/search/?api=1&query=Dr.+Jo%C3%A3o+Cl%C3%A1udio+Miranda+Goi%C3%A2nia",
-  // Placeholders — ainda faltam do João
-  phone: "(62) 0000-0000",
-  whatsapp: "5562000000000",
-  instagram: "@drjoaoclaudio",
+  // Contato real do Dr. João Cláudio
+  phone: "+55 62 9975-0293",
+  whatsapp: "556299750293",
+  instagram: "@drjoaoclaudio", // TODO: confirmar handle real do Instagram
   credentials: [
     { short: "SBOT", label: "Titular" },
     { short: "TRF1", label: "Perito Judicial" },
@@ -32,5 +32,7 @@ export const site = {
   ],
 };
 
-export const whatsappLink = (msg = "Olá, gostaria de agendar uma avaliação.") =>
-  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
+export const whatsappLink = (
+  whatsapp: string = site.whatsapp,
+  msg = "Olá, gostaria de agendar uma avaliação.",
+) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`;

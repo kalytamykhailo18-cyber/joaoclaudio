@@ -26,12 +26,13 @@ export const faqField: Field = {
 };
 
 // Slug com validação de URL amigável.
-export const slugField = (label = "Slug (URL)"): Field => ({
+// `unique` é global; condições usam unique=false (o slug é único por região).
+export const slugField = (label = "Slug (URL)", unique = true): Field => ({
   name: "slug",
   type: "text",
   label,
   required: true,
-  unique: true,
+  unique,
   admin: { description: "URL semântica em minúsculas, ex.: hernia-de-disco" },
   validate: (val: unknown) =>
     typeof val === "string" && /^[a-z0-9-]+$/.test(val)

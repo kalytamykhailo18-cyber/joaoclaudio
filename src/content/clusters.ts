@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────
 
 export type Condition = {
+  id?: string | number; // id do documento no CMS (para edição inline)
   slug: string;
   name: string;
   h1: string;
@@ -13,12 +14,15 @@ export type Condition = {
   description: string;  // meta description
   keyword: string;      // keyword-alvo principal
   intro: string;
+  whatIs?: string;      // parágrafo "O que é" (editável; vazio = texto padrão)
+  howTreat?: string;    // parágrafo "Como o médico trata" (editável)
   siblings?: string[];  // slugs de condições irmãs (link lateral)
   treatments?: string[]; // slugs de tratamentos relacionados
   faq?: { q: string; a: string }[];
 };
 
 export type Region = {
+  id?: string | number;
   slug: string;
   name: string;
   h1: string;
@@ -30,6 +34,7 @@ export type Region = {
 };
 
 export type Treatment = {
+  id?: string | number;
   slug: string;
   name: string;
   short: string;
@@ -39,6 +44,7 @@ export type Treatment = {
   keyword: string;
   intro: string;
   tag: string;
+  howWorks?: string; // parágrafo "Como funciona" (editável; vazio = usa a introdução)
 };
 
 export const regions: Region[] = [

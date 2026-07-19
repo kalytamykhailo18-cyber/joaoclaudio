@@ -12,6 +12,9 @@ import { Conditions } from "./payload/collections/Conditions";
 import { Treatments } from "./payload/collections/Treatments";
 import { Posts } from "./payload/collections/Posts";
 import { SiteSettings } from "./payload/globals/SiteSettings";
+import { HomePage } from "./payload/globals/HomePage";
+import { Pages } from "./payload/globals/Pages";
+import { UI } from "./payload/globals/UI";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,7 +26,9 @@ export default buildConfig({
     },
   },
   collections: [Regions, Conditions, Treatments, Posts, Media, Users],
-  globals: [SiteSettings],
+  globals: [SiteSettings, HomePage, Pages, UI],
+  cors: ["https://joaoclaudiomiranda.com"],
+  csrf: ["https://joaoclaudiomiranda.com"],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },

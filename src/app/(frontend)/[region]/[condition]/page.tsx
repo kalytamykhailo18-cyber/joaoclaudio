@@ -5,15 +5,20 @@ import {
   getRegion,
   getCondition,
   getTreatment,
-  allConditionParams,
-} from "@/content/clusters";
+  getConditionParams,
+  getUI,
+} from "@/lib/content";
 import Breadcrumb from "@/components/Breadcrumb";
 import CtaBand from "@/components/CtaBand";
+import FaqInline from "@/components/FaqInline";
+import Reveal from "@/components/Reveal";
+import InlineEdit from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema, MedicalConditionSchema, FaqSchema } from "@/components/Schema";
 
-export const dynamicParams = false;
+export const dynamicParams = true; // páginas novas no CMS renderizam sem rebuild
+export const revalidate = 60; // ISR: edições no /admin aparecem em ~60s
 export function generateStaticParams() {
-  return allConditionParams;
+  return getConditionParams();
 }
 
 export async function generateMetadata({
@@ -22,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ region: string; condition: string }>;
 }): Promise<Metadata> {
   const { region, condition } = await params;
-  const c = getCondition(region, condition);
+  const c = await getCondition(region, condition);
   if (!c) return {};
   return {
     title: c.title,
@@ -37,90 +42,124 @@ export default async function ConditionPage({
   params: Promise<{ region: string; condition: string }>;
 }) {
   const { region: regionSlug, condition: conditionSlug } = await params;
-  const region = getRegion(regionSlug);
-  const c = getCondition(regionSlug, conditionSlug);
+  const region = await getRegion(regionSlug);
+  const c = await getCondition(regionSlug, conditionSlug);
   if (!region || !c) notFound();
+  const ui = await getUI();
+  const cp = ui.conditionPage;
+  const ch = ui.chips;
 
-  const siblings = (c.siblings ?? [])
-    .map((s) => getCondition(region.slug, s))
-    .filter(Boolean);
-  const relTreatments = (c.treatments ?? []).map((t) => getTreatment(t)).filter(Boolean);
+  const siblings = (
+    await Promise.all((c.siblings ?? []).map((s) => getCondition(region.slug, s)))
+  ).filter(Boolean);
+  const relTreatments = (
+    await Promise.all((c.treatments ?? []).map((t) => getTreatment(t)))
+  ).filter(Boolean);
+
+  // Texto exibido = campo do CMS ou, se vazio, um padrão próprio (não repete o hero).
+  // O editor recebe exatamente esse texto, para que a caixa reflita o que está na página.
+  const whatIs =
+    c.whatIs ||
+    "O diagnóstico preciso é o primeiro passo: define a causa da dor e orienta o tratamento mais indicado para o seu caso, sempre priorizando as opções sem cirurgia.";
+  const howTreat =
+    c.howTreat ||
+    "A conduta combina avaliação clínica, análise de imagem e, quando indicado, procedimentos guiados por ultrassom aplicados com precisão no ponto da dor.";
 
   return (
     <>
-      <section className="page-hero">
-        <div className="wrap">
-          <Breadcrumb
-            items={[
-              { name: "Início", url: "/" },
-              { name: region.name, url: `/${region.slug}` },
-              { name: c.name },
-            ]}
-          />
-          <span className="eyebrow">{region.name}</span>
-          <h1>{c.h1}</h1>
-          <p>{c.intro}</p>
-        </div>
-      </section>
+      <InlineEdit
+        collection="conditions"
+        id={c.id}
+        title={`Editar: ${c.name}`}
+        fields={[
+          { name: "name", label: "Nome", type: "text", value: c.name },
+          { name: "h1", label: "Título (H1)", type: "text", value: c.h1 },
+          { name: "intro", label: "Introdução", type: "textarea", value: c.intro },
+          { name: "seo.title", label: "Meta title (SEO)", type: "text", value: c.title },
+          { name: "seo.description", label: "Meta description (SEO)", type: "textarea", value: c.description },
+        ]}
+      >
+        <section className="page-hero">
+          <div className="wrap">
+            <Reveal as="div" index={0}>
+              <Breadcrumb
+                items={[
+                  { name: "Início", url: "/" },
+                  { name: region.name, url: `/${region.slug}` },
+                  { name: c.name },
+                ]}
+              />
+            </Reveal>
+            <Reveal as="span" className="eyebrow" index={1}>{region.name}</Reveal>
+            <Reveal as="h1" index={2}>{c.h1}</Reveal>
+            <Reveal as="p" index={3}>{c.intro}</Reveal>
+          </div>
+        </section>
+      </InlineEdit>
 
       <section>
         <div className="wrap prose">
-          <h2>O que é {c.name.toLowerCase()}</h2>
-          <p>
-            {c.intro} O diagnóstico preciso é o primeiro passo: define a causa da dor e orienta o
-            tratamento mais indicado para o seu caso — sempre priorizando as opções sem cirurgia.
-          </p>
-          <p style={{ color: "#8a6a2f", fontStyle: "italic" }}>
-            [Espaço reservado para o conteúdo clínico — preenchido a partir do briefing de SEO por
-            você ou pelo redator médico.]
-          </p>
+          <InlineEdit
+            collection="conditions"
+            id={c.id}
+            title={`Editar conteúdo: ${c.name}`}
+            fields={[
+              { name: "whatIs", label: "Parágrafo — O que é", type: "textarea", value: whatIs },
+              { name: "howTreat", label: "Parágrafo — Como o médico trata", type: "textarea", value: howTreat },
+            ]}
+          >
+            <div>
+              <Reveal as="h2" index={0}>{cp.oQue} {c.name.toLowerCase()}</Reveal>
+              <Reveal as="p" index={1}>{whatIs}</Reveal>
 
-          <h2>Como o {region ? "Dr. João Cláudio" : ""} trata</h2>
-          <p>
-            A conduta combina avaliação clínica, análise de imagem e, quando indicado, procedimentos
-            guiados por ultrassom aplicados com precisão no ponto da dor.
-          </p>
+              <Reveal as="h2" index={3}>{cp.comoTrata}</Reveal>
+              <Reveal as="p" index={4}>{howTreat}</Reveal>
+            </div>
+          </InlineEdit>
 
           {relTreatments.length > 0 && (
             <>
-              <h3>Tratamentos indicados</h3>
-              <div className="related">
+              <Reveal as="h3" index={0}>{cp.tratamentosIndicados}</Reveal>
+              <Reveal as="div" className="related" index={1}>
                 {relTreatments.map((t) => (
                   <Link className="chip" href={`/tratamentos/${t!.slug}`} key={t!.slug}>
                     {t!.short} →
                   </Link>
                 ))}
-              </div>
+              </Reveal>
             </>
           )}
 
-          {c.faq && c.faq.length > 0 && (
-            <>
-              <h2>Perguntas frequentes</h2>
-              <div className="faq">
-                {c.faq.map((f, i) => (
-                  <details key={i} open={i === 0}>
-                    <summary>{f.q}</summary>
-                    <p>{f.a}</p>
-                  </details>
-                ))}
-              </div>
-            </>
-          )}
+          <>
+            <InlineEdit
+              globalSlug="ui"
+              title="Editar: Títulos das páginas de condição (aplicam-se a todas)"
+              fields={[
+                { name: "conditionPage.oQue", label: "Prefixo 'O que é'", type: "text", value: cp.oQue },
+                { name: "conditionPage.comoTrata", label: "Título 'Como o médico trata'", type: "text", value: cp.comoTrata },
+                { name: "conditionPage.tratamentosIndicados", label: "Título 'Tratamentos indicados'", type: "text", value: cp.tratamentosIndicados },
+                { name: "conditionPage.perguntasFrequentes", label: "Título 'Perguntas frequentes'", type: "text", value: cp.perguntasFrequentes },
+                { name: "conditionPage.condicoesRelacionadas", label: "Título 'Condições relacionadas'", type: "text", value: cp.condicoesRelacionadas },
+              ]}
+            >
+              <Reveal as="h2" index={0}>{cp.perguntasFrequentes}</Reveal>
+            </InlineEdit>
+            <FaqInline items={c.faq ?? []} target={{ collection: "conditions", id: c.id, field: "faq" }} />
+          </>
 
           {siblings.length > 0 && (
             <>
-              <h3>Condições relacionadas</h3>
-              <div className="related">
+              <Reveal as="h3" index={0}>{cp.condicoesRelacionadas}</Reveal>
+              <Reveal as="div" className="related" index={1}>
                 {siblings.map((s) => (
                   <Link className="chip" href={`/${region.slug}/${s!.slug}`} key={s!.slug}>
                     {s!.name} →
                   </Link>
                 ))}
                 <Link className="chip" href={`/${region.slug}`}>
-                  Ver {region.name} →
+                  {ch.ver} {region.name} →
                 </Link>
-              </div>
+              </Reveal>
             </>
           )}
         </div>

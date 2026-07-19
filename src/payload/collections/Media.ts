@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { revalidateChange, revalidateDelete } from "../hooks/revalidate";
 
 // Biblioteca de mídia — imagens em WebP com tamanhos por breakpoint (Core Web Vitals).
 export const Media: CollectionConfig = {
@@ -6,6 +7,7 @@ export const Media: CollectionConfig = {
   admin: { group: "Conteúdo" },
   labels: { singular: "Mídia", plural: "Mídia" },
   access: { read: () => true },
+  hooks: { afterChange: [revalidateChange], afterDelete: [revalidateDelete] },
   upload: {
     staticDir: "public/media",
     mimeTypes: ["image/*"],

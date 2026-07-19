@@ -1,28 +1,29 @@
 import Link from "next/link";
-import { regions } from "@/content/clusters";
+import { getRegions, getUI } from "@/lib/content";
+import Reveal from "@/components/Reveal";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const [regions, ui] = await Promise.all([getRegions(), getUI()]);
+  const nf = ui.notFound;
   return (
     <section className="page-hero" style={{ minHeight: "80vh", display: "grid", alignItems: "center" }}>
       <div className="wrap" style={{ textAlign: "center", maxWidth: 720, margin: "0 auto" }}>
-        <span className="eyebrow">Erro 404</span>
-        <h1 style={{ margin: "16px 0" }}>Página não encontrada</h1>
-        <p style={{ margin: "0 auto 28px" }}>
-          A página que você procura não existe ou foi movida. Encontre a sua área de cuidado:
-        </p>
-        <div className="related" style={{ justifyContent: "center" }}>
+        <Reveal as="span" className="eyebrow" index={0}>{nf.eyebrow}</Reveal>
+        <Reveal as="h1" index={1} style={{ margin: "16px 0" }}>{nf.title}</Reveal>
+        <Reveal as="p" index={2} style={{ margin: "0 auto 28px" }}>{nf.text}</Reveal>
+        <Reveal as="div" className="related" index={3} style={{ justifyContent: "center" }}>
           {regions.map((r) => (
             <Link className="chip" href={`/${r.slug}`} key={r.slug} style={{ color: "#fff", borderColor: "var(--line-d)" }}>
               {r.name} →
             </Link>
           ))}
           <Link className="chip" href="/tratamentos" style={{ color: "#fff", borderColor: "var(--line-d)" }}>
-            Tratamentos →
+            {nf.tratamentos}
           </Link>
-        </div>
-        <div style={{ marginTop: 32 }}>
-          <Link className="btn btn-gold" href="/">Voltar ao início</Link>
-        </div>
+        </Reveal>
+        <Reveal as="div" index={4} style={{ marginTop: 32 }}>
+          <Link className="btn btn-gold" href="/">{nf.button}</Link>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import type { GlobalConfig } from "payload";
+import { revalidateChange } from "../hooks/revalidate";
 
 // Dados institucionais editáveis pelo médico — alimentam header, footer e Schema local.
 export const SiteSettings: GlobalConfig = {
@@ -6,6 +7,7 @@ export const SiteSettings: GlobalConfig = {
   label: "Configurações do site",
   admin: { group: "Administração" },
   access: { read: () => true },
+  hooks: { afterChange: [revalidateChange] },
   fields: [
     { name: "doctor", type: "text", label: "Nome do médico", defaultValue: "Dr. João Cláudio Miranda" },
     { name: "specialty", type: "text", label: "Especialidade", defaultValue: "Ortopedia · Medicina da Dor" },

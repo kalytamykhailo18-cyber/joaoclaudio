@@ -1,4 +1,8 @@
 import { site } from "@/content/site";
+import Reveal from "@/components/Reveal";
+import InlineEdit from "@/components/inline/InlineEdit";
+import { getGoogleReviews } from "@/lib/googleReviews";
+import { getPages, getUI } from "@/lib/content";
 
 function GoogleG({ size = 22 }: { size?: number }) {
   return (
@@ -11,39 +15,66 @@ function GoogleG({ size = 22 }: { size?: number }) {
   );
 }
 
-export default function GoogleReviews() {
-  const rating = site.rating.toFixed(1).replace(".", ",");
+export default async function GoogleReviews() {
+  const [g, pages, ui] = await Promise.all([getGoogleReviews(), getPages(), getUI()]);
+  const r = pages.reviews;
+  const rl = ui.reviews;
+  const ratingNum = g?.rating ?? site.rating;
+  const rating = ratingNum.toFixed(1).replace(".", ",");
+  const total = g?.total ?? site.reviewCount;
+  const featured = g?.reviews?.[0];
+
   return (
-    <section className="reviews">
-      <div className="wrap">
-        <span className="eyebrow">Reconhecimento dos pacientes</span>
-        <h2>A confiança de quem já foi atendido.</h2>
+    <InlineEdit
+      globalSlug="pages"
+      title="Editar: Avaliações do Google"
+      fields={[
+        { name: "reviews.eyebrow", label: "Rótulo", type: "text", value: r.eyebrow },
+        { name: "reviews.heading", label: "Título", type: "text", value: r.heading },
+        { name: "reviews.verified", label: "Texto — perfil verificado", type: "text", value: r.verified },
+        { name: "reviews.fallbackQuote", label: "Citação padrão (sem API)", type: "textarea", value: r.fallbackQuote },
+        { name: "reviews.button", label: "Botão", type: "text", value: r.button },
+      ]}
+    >
+      <section className="reviews">
+        <div className="wrap">
+          <Reveal as="span" className="eyebrow" index={0}>
+            {r.eyebrow}
+          </Reveal>
+          <Reveal as="h2" index={1}>
+            {r.heading}
+          </Reveal>
 
-        <div className="reviews-badge">
-          <div className="reviews-score">
-            <span className="num">{rating}</span>
-            <span className="stars" aria-label={`${rating} de 5 estrelas`}>★★★★★</span>
-          </div>
-          <div className="reviews-meta">
-            <span className="gline">
-              <GoogleG /> <strong>{site.reviewCount}</strong>&nbsp;avaliações no Google
-            </span>
-            <span className="verified">Perfil verificado · {site.clinicName}</span>
-          </div>
+          <Reveal as="div" className="reviews-badge" index={2}>
+            <div className="reviews-score">
+              <span className="num">{rating}</span>
+              <span className="stars" aria-label={`${rating} de 5 estrelas`}>★★★★★</span>
+            </div>
+            <div className="reviews-meta">
+              <span className="gline">
+                <GoogleG /> <strong>{total}</strong>&nbsp;{rl.avaliacoesGoogle}
+              </span>
+              <span className="verified">{r.verified} · {site.clinicName}</span>
+            </div>
+          </Reveal>
+
+          <Reveal as="blockquote" className="reviews-quote" index={3}>
+            {featured ? `“${featured.text}”` : `“${r.fallbackQuote}”`}
+          </Reveal>
+          {featured && (
+            <Reveal as="cite" className="reviews-cite" index={4}>
+              — {featured.author}
+              {featured.relative ? `, ${featured.relative}` : ""}
+            </Reveal>
+          )}
+
+          <Reveal as="div" index={5}>
+            <a className="btn btn-outline-l" href={site.googleReviewsUrl} target="_blank" rel="noopener">
+              {r.button}
+            </a>
+          </Reveal>
         </div>
-
-        {/* Depoimento em destaque — quando a API do Google for conectada,
-            este bloco passa a puxar avaliações reais automaticamente. */}
-        <blockquote className="reviews-quote">
-          &ldquo;Convivi anos com dor no joelho achando que só a cirurgia resolveria. Com o
-          tratamento certo, voltei a caminhar e a dormir sem dor. Atendimento humano do começo ao
-          fim.&rdquo;
-        </blockquote>
-
-        <a className="btn btn-outline-l" href={site.googleReviewsUrl} target="_blank" rel="noopener">
-          Ver avaliações no Google
-        </a>
-      </div>
-    </section>
+      </section>
+    </InlineEdit>
   );
 }

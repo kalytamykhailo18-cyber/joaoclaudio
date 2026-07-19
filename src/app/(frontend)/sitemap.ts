@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 import { regions, treatments, applications } from "@/content/clusters";
+import { posts } from "@/content/blog";
 import { site } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.domain;
-  const staticRoutes = ["", "/tratamentos", "/sobre", "/contato"];
-  const legal = ["/politica-de-privacidade", "/politica-de-cookies", "/termos-de-uso"];
+  const staticRoutes = ["", "/dor-cronica", "/tratamentos", "/sobre", "/contato", "/agendar", "/depoimentos", "/blog"];
+  // Páginas legais ficam fora do sitemap (noindex).
 
   const regionRoutes = regions.map((r) => `/${r.slug}`);
   const conditionRoutes = regions.flatMap((r) =>
@@ -15,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const applicationRoutes = applications.map(
     (a) => `/tratamentos/${a.treatment}/${a.condition}`,
   );
+  const blogRoutes = posts.map((p) => `/blog/${p.slug}`);
 
   const all = [
     ...staticRoutes,
@@ -22,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...conditionRoutes,
     ...treatmentRoutes,
     ...applicationRoutes,
-    ...legal,
+    ...blogRoutes,
   ];
 
   return all.map((path) => ({
