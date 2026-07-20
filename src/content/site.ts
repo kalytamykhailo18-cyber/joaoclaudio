@@ -3,6 +3,10 @@
 export const site = {
   doctor: "Dr. João Cláudio Miranda",
   specialty: "Ortopedia · Medicina da Dor",
+  // Registro profissional (exigido pelo CFM na comunicação). Confirmados no Facebook
+  // oficial e no corpo clínico do Hospital Amparo.
+  crm: "CRM-GO 22.782",
+  rqe: "RQE 15206",
   city: "Goiânia",
   region: "GO",
   country: "BR",
@@ -22,7 +26,7 @@ export const site = {
   // Contato real do Dr. João Cláudio
   phone: "+55 62 9975-0293",
   whatsapp: "556299750293",
-  instagram: "@drjoaoclaudio", // TODO: confirmar handle real do Instagram
+  instagram: "@drjoaoclaudiomiranda", // handle real (instagram.com/drjoaoclaudiomiranda)
   credentials: [
     { short: "SBOT", label: "Titular" },
     { short: "TRF1", label: "Perito Judicial" },

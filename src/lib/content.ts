@@ -39,6 +39,7 @@ export const getHomePage = cache(async (): Promise<HomeContent> => {
       steps: mergeSection(homeDefault.steps, h.steps),
       treatments: mergeSection(homeDefault.treatments, h.treatments),
       quote: mergeSection(homeDefault.quote, h.quote),
+      location: mergeSection(homeDefault.location, h.location),
       stepItems,
     };
   } catch {

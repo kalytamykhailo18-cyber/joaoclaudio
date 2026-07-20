@@ -8,12 +8,14 @@ import Reveal from "@/components/Reveal";
 import InlineEdit, { InlinePencil, InlineAdd } from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema, MedicalSpecialtySchema, FaqSchema } from "@/components/Schema";
 
-export const metadata: Metadata = {
-  title: "Tratamento para Dor Crônica em Goiânia",
-  description:
-    "Dor crônica que não passa? Diagnóstico preciso e tratamento especializado em Goiânia para coluna, joelho, ombro e quadril, com abordagem sem cirurgia como 1ª opção.",
-  alternates: { canonical: "/dor-cronica" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.dorCronicaTitle,
+    description: seo.dorCronicaDescription,
+    alternates: { canonical: "/dor-cronica" },
+  };
+}
 
 export const revalidate = 60; // ISR: cards refletem o CMS
 
@@ -35,6 +37,8 @@ export default async function DorCronicaPage() {
           { name: "dorCronica.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
           { name: "dorCronica.h1", label: "Título (H1)", type: "text", value: h.h1 },
           { name: "dorCronica.lead", label: "Parágrafo de abertura", type: "textarea", value: h.lead },
+          { name: "seo.dorCronicaTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.dorCronicaTitle },
+          { name: "seo.dorCronicaDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.dorCronicaDescription },
         ]}
       >
         <section className="page-hero">

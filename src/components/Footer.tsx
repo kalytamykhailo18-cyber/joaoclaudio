@@ -90,7 +90,7 @@ export default async function Footer({
           </div>
         </div>
         <div className="fbottom">
-          <span>© {new Date().getFullYear()} {site.doctor} · {f.rights}</span>
+          <span>© {new Date().getFullYear()} {site.doctor} · {site.crm} · {site.rqe} · {f.rights}</span>
           <span>
             <Link href="/politica-de-privacidade">{nav.privacidade}</Link> ·{" "}
             <Link href="/politica-de-cookies">{nav.cookies}</Link> ·{" "}

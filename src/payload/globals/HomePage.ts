@@ -62,6 +62,12 @@ export const HomePage: GlobalConfig = {
       { name: "text", label: "Texto", type: "textarea" },
       { name: "cite", label: "Autor", type: "text" },
     ]),
+    section("location", "Localização (home)", [
+      { name: "eyebrow", label: "Rótulo", type: "text" },
+      { name: "heading", label: "Título", type: "text" },
+      { name: "note", label: "Texto", type: "textarea" },
+      { name: "button", label: "Botão (como chegar)", type: "text" },
+    ]),
     { name: "heroPhoto", type: "upload", relationTo: "media", label: "Foto do hero (médico)" } as Field,
     {
       name: "stepItems",

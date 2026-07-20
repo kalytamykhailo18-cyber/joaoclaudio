@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       collection: "treatments",
       data: {
         name: t.name, short: t.short, tag: t.tag, slug: t.slug, h1: t.h1,
-        intro: t.intro, order: i,
+        intro: t.intro, howWorks: t.howWorks ?? "", order: i,
         seo: { title: t.title, description: t.description, keyword: t.keyword },
       },
     });
@@ -64,6 +64,7 @@ export async function POST(req: Request) {
         collection: "conditions",
         data: {
           name: c.name, slug: c.slug, region: rMap[r.slug], h1: c.h1, intro: c.intro,
+          whatIs: c.whatIs ?? "", howTreat: c.howTreat ?? "",
           treatments: (c.treatments ?? []).map((s) => tMap[s]).filter(Boolean),
           faq: c.faq ?? [],
           seo: { title: c.title, description: c.description, keyword: c.keyword },

@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getRegions, getTreatments, getSiteSettings, getHomePage, getPages, getUI } from "@/lib/content";
 import CtaBand from "@/components/CtaBand";
+import ClinicMap from "@/components/ClinicMap";
 import GoogleReviews from "@/components/GoogleReviews";
 import Testimonials from "@/components/Testimonials";
 import Reveal from "@/components/Reveal";
@@ -8,6 +10,16 @@ import InlineEdit, { InlinePencil, InlineAdd, InlineArrayItem, InlineArrayAdd } 
 import { getGoogleReviews } from "@/lib/googleReviews";
 
 export const revalidate = 60; // ISR: conteúdo, nav e cards refletem o CMS
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    // absolute: preserva o título exato da home (sem o sufixo do template do layout)
+    title: { absolute: seo.homeTitle },
+    description: seo.homeDescription,
+    alternates: { canonical: "/" },
+  };
+}
 
 export default async function Home() {
   const [regions, treatments, site, home, pages, ui, g] = await Promise.all([
@@ -46,7 +58,16 @@ export default async function Home() {
             <div className="copy-col">
               <div className="wrap">
                 <div className="copy">
-                  <Reveal as="em" className="pre" index={0}>{home.hero.pre}</Reveal>
+                  <InlineEdit
+                    globalSlug="pages"
+                    title="Editar: SEO da Home (Google)"
+                    fields={[
+                      { name: "seo.homeTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.homeTitle },
+                      { name: "seo.homeDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.homeDescription },
+                    ]}
+                  >
+                    <Reveal as="em" className="pre" index={0}>{home.hero.pre}</Reveal>
+                  </InlineEdit>
                   <Reveal as="h1" index={1}>{home.hero.h1}</Reveal>
                   <Reveal as="p" className="sub" index={2}>{home.hero.sub}</Reveal>
                   <Reveal as="div" className="hr" index={3} />
@@ -64,9 +85,10 @@ export default async function Home() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={home.hero.photoUrl} alt="Dr. João Cláudio Miranda" className="ph-photo" />
               ) : (
-                // Marca d'água do monograma até a foto profissional chegar.
+                // Foto profissional real do médico (recuperada do site antigo) como padrão,
+                // até que o João envie uma nova pelo CMS inline. Ainda 100% editável.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src="/brand/monogram-white.webp" alt="" aria-hidden className="ph-monogram" />
+                <img src="/doctor/dr-joao-cutout.webp" alt="Dr. João Cláudio Miranda" className="ph-photo" />
               )}
             </div>
           </div>
@@ -363,6 +385,11 @@ export default async function Home() {
           </div>
         </section>
       </InlineEdit>
+
+      {/* LOCALIZAÇÃO — mapa em tela cheia (largura total, sem texto) */}
+      <section className="loc-map-full-sec" aria-label="Localização do consultório">
+        <ClinicMap address={site.address} clinicName={site.clinicName ?? site.doctor} full />
+      </section>
 
       <CtaBand />
     </>

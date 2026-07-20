@@ -77,15 +77,6 @@ export default function Header({
               ))}
             </ul>
           </div>
-          <div>
-            <h4><Link href="/dor-cronica" onClick={close}>{nav.dorCronica}</Link></h4>
-            <ul>
-              <li><Link href="/sobre" onClick={close}>{nav.oMedico}</Link></li>
-              <li><Link href="/blog" onClick={close}>{nav.blog}</Link></li>
-              <li><Link href="/depoimentos" onClick={close}>{nav.depoimentos}</Link></li>
-              <li><Link href="/agendar" onClick={close}>{nav.agendar}</Link></li>
-            </ul>
-          </div>
           <InlineEdit
             globalSlug="ui"
             title="Editar: Textos gerais do site (menu, links e rótulos)"
@@ -120,8 +111,13 @@ export default function Header({
             ]}
           >
             <div>
-              <h4>{nav.acesso}</h4>
+              <h4><Link href="/dor-cronica" onClick={close}>{nav.dorCronica}</Link></h4>
               <ul>
+                <li><Link href="/sobre" onClick={close}>{nav.oMedico}</Link></li>
+                <li><Link href="/blog" onClick={close}>{nav.blog}</Link></li>
+                <li><Link href="/depoimentos" onClick={close}>{nav.depoimentos}</Link></li>
+                <li><Link href="/agendar" onClick={close}>{nav.agendar}</Link></li>
+                <li><Link href="/contato" onClick={close}>{nav.contato}</Link></li>
                 {admin ? (
                   <li><button type="button" className="nav-linkbtn" onClick={logout}>{nav.sair}</button></li>
                 ) : (

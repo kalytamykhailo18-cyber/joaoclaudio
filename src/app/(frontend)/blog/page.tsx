@@ -7,12 +7,14 @@ import Reveal from "@/components/Reveal";
 import InlineEdit, { InlinePencil, InlineAdd } from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema } from "@/components/Schema";
 
-export const metadata: Metadata = {
-  title: "Blog de Ortopedia e Dor Crônica",
-  description:
-    "Conteúdo educativo sobre dor crônica, coluna, joelho, ombro e quadril — do Dr. João Cláudio Miranda, ortopedista em Goiânia.",
-  alternates: { canonical: "/blog" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.blogTitle,
+    description: seo.blogDescription,
+    alternates: { canonical: "/blog" },
+  };
+}
 
 const fmtDate = (iso: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString("pt-BR", {
@@ -24,7 +26,7 @@ const fmtDate = (iso: string) =>
 export const revalidate = 60; // ISR: posts do CMS refletem no índice
 
 export default async function BlogIndex() {
-  const [{ blogIndex: h }, posts, ui] = await Promise.all([getPages(), getPosts(), getUI()]);
+  const [{ blogIndex: h, seo }, posts, ui] = await Promise.all([getPages(), getPosts(), getUI()]);
   const ch = ui.chips;
   const bl = ui.blog;
   return (
@@ -36,6 +38,8 @@ export default async function BlogIndex() {
           { name: "blogIndex.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
           { name: "blogIndex.h1", label: "Título (H1)", type: "text", value: h.h1 },
           { name: "blogIndex.p", label: "Descrição", type: "textarea", value: h.p },
+          { name: "seo.blogTitle", label: "SEO — Meta title (Google)", type: "text", value: seo.blogTitle },
+          { name: "seo.blogDescription", label: "SEO — Meta description (Google)", type: "textarea", value: seo.blogDescription },
         ]}
       >
         <section className="page-hero">

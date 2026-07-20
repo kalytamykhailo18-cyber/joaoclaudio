@@ -21,6 +21,10 @@ export async function PhysicianSchema() {
         name: site.doctor,
         medicalSpecialty: ["Orthopedic", "PainMedicine"],
         description: `Ortopedista especializado em dor crônica, coluna, joelho, ombro e quadril em ${site.city}.`,
+        identifier: [
+          { "@type": "PropertyValue", propertyID: "CRM", value: site.crm },
+          { "@type": "PropertyValue", propertyID: "RQE", value: site.rqe },
+        ],
         url: site.domain,
         areaServed: `${site.city}, ${site.region}`,
         address: {

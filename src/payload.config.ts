@@ -11,6 +11,7 @@ import { Regions } from "./payload/collections/Regions";
 import { Conditions } from "./payload/collections/Conditions";
 import { Treatments } from "./payload/collections/Treatments";
 import { Posts } from "./payload/collections/Posts";
+import { Redirects } from "./payload/collections/Redirects";
 import { SiteSettings } from "./payload/globals/SiteSettings";
 import { HomePage } from "./payload/globals/HomePage";
 import { Pages } from "./payload/globals/Pages";
@@ -25,7 +26,7 @@ export default buildConfig({
       titleSuffix: "· Dr. João Cláudio Miranda",
     },
   },
-  collections: [Regions, Conditions, Treatments, Posts, Media, Users],
+  collections: [Regions, Conditions, Treatments, Posts, Redirects, Media, Users],
   globals: [SiteSettings, HomePage, Pages, UI],
   cors: ["https://joaoclaudiomiranda.com"],
   csrf: ["https://joaoclaudiomiranda.com"],
@@ -34,6 +35,9 @@ export default buildConfig({
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || "" },
+    // Ambiente de desenvolvimento: sincroniza o schema no start (cria tabelas de
+    // coleções novas, ex.: `redirects`, sem migração manual). additivo/seguro aqui.
+    push: true,
   }),
   sharp,
   i18n: { fallbackLanguage: "pt" }, // painel admin em português

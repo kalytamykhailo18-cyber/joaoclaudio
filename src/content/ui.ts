@@ -48,6 +48,8 @@ export const uiDefault = {
     text: "A página que você procura não existe ou foi movida. Encontre a sua área de cuidado:",
     button: "Voltar ao início",
     tratamentos: "Tratamentos →",
+    searchPlaceholder: "Buscar por dor, condição ou tratamento...",
+    searchEmpty: "Nada encontrado. Tente outro termo ou volte ao início.",
   },
   // Página "em breve"
   emBreve: {

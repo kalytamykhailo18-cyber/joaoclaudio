@@ -9,12 +9,14 @@ import { BreadcrumbSchema } from "@/components/Schema";
 
 export const revalidate = 60; // ISR: edições no /admin aparecem em ~60s
 
-export const metadata: Metadata = {
-  title: "Tratamentos de Dor Sem Cirurgia",
-  description:
-    "Tratamentos modernos de dor em Goiânia: medicina regenerativa, infiltração guiada por ultrassom, ondas de choque e viscossuplementação.",
-  alternates: { canonical: "/tratamentos" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.tratamentosTitle,
+    description: seo.tratamentosDescription,
+    alternates: { canonical: "/tratamentos" },
+  };
+}
 
 export default async function TreatmentsIndex() {
   const [treatments, pages, ui] = await Promise.all([getTreatments(), getPages(), getUI()]);
@@ -29,6 +31,8 @@ export default async function TreatmentsIndex() {
           { name: "treatmentsIndex.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
           { name: "treatmentsIndex.h1", label: "Título (H1)", type: "text", value: h.h1 },
           { name: "treatmentsIndex.p", label: "Descrição", type: "textarea", value: h.p },
+          { name: "seo.tratamentosTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.tratamentosTitle },
+          { name: "seo.tratamentosDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.tratamentosDescription },
         ]}
       >
         <section className="page-hero">

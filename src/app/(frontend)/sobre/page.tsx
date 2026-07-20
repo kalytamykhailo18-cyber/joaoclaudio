@@ -7,12 +7,14 @@ import Reveal from "@/components/Reveal";
 import InlineEdit, { InlineArrayItem, InlineArrayAdd } from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema } from "@/components/Schema";
 
-export const metadata: Metadata = {
-  title: `Sobre o ${site.doctor}`,
-  description:
-    "Conheça o Dr. João Cláudio Miranda — ortopedista especializado em dor crônica em Goiânia. Titular SBOT, perito TRF1, membro IASP, professor e coordenador.",
-  alternates: { canonical: "/sobre" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.sobreTitle,
+    description: seo.sobreDescription,
+    alternates: { canonical: "/sobre" },
+  };
+}
 
 export const revalidate = 60;
 
@@ -31,6 +33,8 @@ export default async function SobrePage() {
           { name: "sobre.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
           { name: "sobre.h1", label: "Título (H1)", type: "text", value: h.h1 },
           { name: "sobre.lead", label: "Parágrafo de abertura", type: "textarea", value: lead },
+          { name: "seo.sobreTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.sobreTitle },
+          { name: "seo.sobreDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.sobreDescription },
         ]}
       >
         <section className="page-hero">

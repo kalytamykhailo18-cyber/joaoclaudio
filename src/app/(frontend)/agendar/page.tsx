@@ -6,12 +6,14 @@ import Reveal from "@/components/Reveal";
 import InlineEdit, { InlineArrayItem, InlineArrayAdd } from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema } from "@/components/Schema";
 
-export const metadata: Metadata = {
-  title: "Agendar Consulta com Ortopedista em Goiânia",
-  description:
-    "Agende sua avaliação com o Dr. João Cláudio Miranda em Goiânia. Atendimento por WhatsApp e telefone, com horário que cabe na sua rotina.",
-  alternates: { canonical: "/agendar" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.agendarTitle,
+    description: seo.agendarDescription,
+    alternates: { canonical: "/agendar" },
+  };
+}
 
 export const revalidate = 60;
 
@@ -30,6 +32,8 @@ export default async function AgendarPage() {
           { name: "agendar.eyebrow", label: "Rótulo", type: "text", value: h.eyebrow },
           { name: "agendar.h1", label: "Título (H1)", type: "text", value: h.h1 },
           { name: "agendar.lead", label: "Parágrafo de abertura", type: "textarea", value: lead },
+          { name: "seo.agendarTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.agendarTitle },
+          { name: "seo.agendarDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.agendarDescription },
         ]}
       >
         <section className="page-hero">

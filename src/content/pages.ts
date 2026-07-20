@@ -41,6 +41,34 @@ export const pagesDefault = {
     button: "Falar no WhatsApp",
   },
   // Índice de tratamentos (/tratamentos).
+  // SEO editável (title/description) das páginas estáticas/institucionais.
+  // Servido como default via mergeSection; sobrescrito quando o médico edita inline.
+  seo: {
+    homeTitle: "Dr. João Cláudio Miranda — Ortopedia e Tratamento da Dor | Goiânia",
+    homeDescription:
+      "Referência em ortopedia e tratamento da dor crônica em Goiânia. Coluna, joelho, ombro e quadril com medicina regenerativa e infiltrações guiadas por ultrassom.",
+    sobreTitle: "Sobre o Dr. João Cláudio Miranda",
+    sobreDescription:
+      "Conheça o Dr. João Cláudio Miranda — ortopedista especializado em dor crônica em Goiânia. Titular SBOT, perito TRF1, membro IASP, professor e coordenador.",
+    contatoTitle: "Contato e Localização em Goiânia",
+    contatoDescription:
+      "Endereço, telefone e WhatsApp do consultório do Dr. João Cláudio Miranda no Setor Marista, Goiânia. Fale conosco e agende sua avaliação.",
+    agendarTitle: "Agendar Consulta com Ortopedista em Goiânia",
+    agendarDescription:
+      "Agende sua avaliação com o Dr. João Cláudio Miranda em Goiânia. Atendimento por WhatsApp e telefone, com horário que cabe na sua rotina.",
+    depoimentosTitle: "Depoimentos de Pacientes",
+    depoimentosDescription:
+      "A avaliação de quem já foi atendido pelo Dr. João Cláudio Miranda em Goiânia — 5,0 estrelas e centenas de avaliações no Google.",
+    dorCronicaTitle: "Tratamento para Dor Crônica em Goiânia",
+    dorCronicaDescription:
+      "Dor crônica que não passa? Diagnóstico preciso e tratamento especializado em Goiânia para coluna, joelho, ombro e quadril, com abordagem sem cirurgia como 1ª opção.",
+    blogTitle: "Blog de Ortopedia e Dor Crônica",
+    blogDescription:
+      "Conteúdo educativo sobre dor crônica, coluna, joelho, ombro e quadril — do Dr. João Cláudio Miranda, ortopedista em Goiânia.",
+    tratamentosTitle: "Tratamentos de Dor Sem Cirurgia",
+    tratamentosDescription:
+      "Tratamentos modernos de dor em Goiânia: medicina regenerativa, infiltração guiada por ultrassom, ondas de choque e viscossuplementação.",
+  },
   treatmentsIndex: {
     eyebrow: "Tratamentos",
     h1: "Tecnologia a serviço do alívio da dor",
@@ -58,14 +86,16 @@ export const pagesDefault = {
     h1: "Autoridade médica com escuta de gente",
     lead: "O médico dedica sua prática ao tratamento da dor crônica e das doenças ortopédicas, unindo diagnóstico preciso, técnicas modernas e uma relação próxima com cada paciente.",
     credsHeading: "Formação e credenciais",
-    bio: "O Dr. João Cláudio Miranda dedica a sua prática ao diagnóstico preciso e ao tratamento da dor, priorizando as opções sem cirurgia sempre que possível. Cada paciente recebe um plano individual, do diagnóstico ao acompanhamento, com atenção e clareza em cada etapa.",
+    bio: "O Dr. João Cláudio Miranda é médico especialista em cirurgia ortopédica, trauma musculoesquelético e dor crônica, com mais de 15 anos dedicados ao tratamento da dor e das doenças do aparelho locomotor. Formou-se em serviços de referência de Goiânia — o Hospital de Urgências de Goiânia (HUGO) e o Centro Estadual de Reabilitação e Readaptação (CRER). É titular da Sociedade Brasileira de Ortopedia e Traumatologia (SBOT), membro da IASP (Associação Internacional para o Estudo da Dor) e perito da Justiça Federal (TRF1), além de coordenador de Ortopedia e Traumatologia do Hospital Amparo, em Goiânia. Sua prática prioriza o diagnóstico preciso e as opções sem cirurgia sempre que possível, com um plano de tratamento individual para cada paciente — do diagnóstico ao acompanhamento.",
   },
   // Credenciais listadas na página Sobre (array editável).
   sobreCreds: [
+    { text: "Título de Especialista (TEOT) · CRM-GO 22.782 · RQE 15206" },
     { text: "Titular da Sociedade Brasileira de Ortopedia e Traumatologia (SBOT)" },
-    { text: "Perito judicial junto ao TRF1" },
     { text: "Membro da IASP, associação internacional para o estudo da dor" },
-    { text: "Professor e coordenador de serviços de ortopedia" },
+    { text: "Perito da Justiça Federal (TRF1)" },
+    { text: "Coordenador de Ortopedia e Traumatologia do Hospital Amparo (Goiânia)" },
+    { text: "Formação em serviços de referência: HUGO e CRER (Goiânia)" },
   ],
   // Contato (/contato).
   contato: {

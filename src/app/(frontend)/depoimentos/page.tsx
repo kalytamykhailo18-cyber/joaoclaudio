@@ -7,16 +7,18 @@ import Reveal from "@/components/Reveal";
 import InlineEdit from "@/components/inline/InlineEdit";
 import { BreadcrumbSchema } from "@/components/Schema";
 
-export const metadata: Metadata = {
-  title: "Depoimentos de Pacientes",
-  description:
-    "A avaliação de quem já foi atendido pelo Dr. João Cláudio Miranda em Goiânia — 5,0 estrelas e centenas de avaliações no Google.",
-  alternates: { canonical: "/depoimentos" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.depoimentosTitle,
+    description: seo.depoimentosDescription,
+    alternates: { canonical: "/depoimentos" },
+  };
+}
 
 export default async function DepoimentosPage() {
   const rating = site.rating.toFixed(1).replace(".", ",");
-  const [{ depoimentos: h }, ui] = await Promise.all([getPages(), getUI()]);
+  const [{ depoimentos: h, seo }, ui] = await Promise.all([getPages(), getUI()]);
   const rl = ui.reviews;
   return (
     <>
@@ -29,6 +31,8 @@ export default async function DepoimentosPage() {
           { name: "depoimentos.lead", label: "Parágrafo de abertura", type: "textarea", value: h.lead },
           { name: "depoimentos.note", label: "Parágrafo explicativo", type: "textarea", value: h.note },
           { name: "depoimentos.button", label: "Botão (avaliações)", type: "text", value: h.button },
+          { name: "seo.depoimentosTitle", label: "SEO — Meta title (Google)", type: "text", value: seo.depoimentosTitle },
+          { name: "seo.depoimentosDescription", label: "SEO — Meta description (Google)", type: "textarea", value: seo.depoimentosDescription },
         ]}
       >
         <section className="page-hero">

@@ -44,6 +44,12 @@ export const homeDefault = {
     text: "Meu objetivo não é apenas tratar a dor. É devolver o movimento e a qualidade de vida de cada paciente.",
     cite: "Dr. João Cláudio Miranda · Ortopedista",
   },
+  location: {
+    eyebrow: "Onde atendemos",
+    heading: "Atendimento em Goiânia, com hora marcada",
+    note: "Consultório no Setor Marista, em Goiânia. Agende pelo WhatsApp e a equipe confirma o melhor dia e horário para a sua avaliação.",
+    button: "Como chegar",
+  },
   stepItems: [
     { t: "Diagnóstico preciso", d: "Avaliação clínica detalhada e análise de imagem para identificar a origem real da dor." },
     { t: "Plano individual", d: "Tratamento desenhado para o seu caso — conservador primeiro, sempre que possível." },

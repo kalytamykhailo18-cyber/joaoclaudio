@@ -3,14 +3,17 @@ import { whatsappLink } from "@/content/site";
 import { getSiteSettings, getPages, getUI } from "@/lib/content";
 import Breadcrumb from "@/components/Breadcrumb";
 import Reveal from "@/components/Reveal";
+import ClinicMap from "@/components/ClinicMap";
 import InlineEdit from "@/components/inline/InlineEdit";
 
-export const metadata: Metadata = {
-  title: "Contato e Agendamento",
-  description:
-    "Agende sua avaliação com o Dr. João Cláudio Miranda em Goiânia. Atendimento por WhatsApp e telefone.",
-  alternates: { canonical: "/contato" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo } = await getPages();
+  return {
+    title: seo.contatoTitle,
+    description: seo.contatoDescription,
+    alternates: { canonical: "/contato" },
+  };
+}
 
 export const revalidate = 60;
 
@@ -31,6 +34,8 @@ export default async function ContatoPage() {
           { name: "contato.whatsappBtn", label: "Botão WhatsApp", type: "text", value: h.whatsappBtn },
           { name: "contato.phoneBtn", label: "Botão telefone", type: "text", value: h.phoneBtn },
           { name: "contato.note", label: "Nota (mapa/formulário)", type: "textarea", value: h.note },
+          { name: "seo.contatoTitle", label: "SEO — Meta title (Google)", type: "text", value: pages.seo.contatoTitle },
+          { name: "seo.contatoDescription", label: "SEO — Meta description (Google)", type: "textarea", value: pages.seo.contatoDescription },
         ]}
       >
         <section className="page-hero">
@@ -76,6 +81,12 @@ export default async function ContatoPage() {
           </div>
         </section>
       </InlineEdit>
+
+      <section style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <ClinicMap address={site.address} clinicName={site.clinicName ?? site.doctor} />
+        </div>
+      </section>
     </>
   );
 }
